@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		},
+		{
+			"path": "../../../../mnt/sdb/AI/work"
+		}
+	],
+	"settings": {
+		"git.ignoreLimitWarning": true
+	}
+}

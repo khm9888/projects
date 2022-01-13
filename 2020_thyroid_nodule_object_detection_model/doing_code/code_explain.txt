@@ -1,0 +1,2 @@
+1_db_to_json_type_1125.py - 일정기간데이터만 가져오게 select 문 구성함.
+1_db_to_json_type_1201.py - maker 1번만 추출
