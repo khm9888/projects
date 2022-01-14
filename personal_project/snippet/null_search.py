@@ -1,1 +1,0 @@
-print(df2[df2["Q"].isnull()])

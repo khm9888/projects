@@ -1,1 +1,0 @@
-np.save("./data/save.npy",arr=y_train)
