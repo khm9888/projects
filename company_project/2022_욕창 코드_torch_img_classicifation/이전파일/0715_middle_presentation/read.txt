@@ -1,0 +1,1 @@
+6_cnt_patient_num.py - 는 환자수 cnt 하는 코드

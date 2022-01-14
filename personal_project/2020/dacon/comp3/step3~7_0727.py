@@ -1,0 +1,164 @@
+import pandas as pd
+import numpy as np
+import sklearn
+from sklearn.ensemble import RandomForestRegressor
+from lightgbm import LGBMRegressor
+from sklearn.preprocessing import LabelEncoder
+from datetime import datetime
+from time import strftime
+
+# 오늘 날짜 넣어주기 위해.
+today=datetime.today().date().strftime("%y%m%d")
+# print(today)
+print("start_read")
+data = pd.read_csv("D:\private\data\dacon/comp3/preprocess/data.csv",index_col=0,header=0)
+df = pd.read_csv("D:\private\data\dacon\comp3\preprocess\df.csv",index_col=0,header=0)
+# data = pd.read_csv("./data/dacon/comp3/preprocess/data.csv",index_col=0,header=0)
+# df = pd.read_csv("./data/dacon/comp3/preprocess/df.csv",index_col=0,header=0)
+print("end_read")
+
+
+# 인코딩
+dtypes = df.dtypes
+encoders = {}
+for column in df.columns:
+    if str(dtypes[column]) == 'object':
+        encoder = LabelEncoder()
+        encoder.fit(df[column])
+        encoders[column] = encoder
+        
+df_num = df.copy()        
+for column in encoders.keys():
+    encoder = encoders[column]
+    df_num[column] = encoder.transform(df[column])
+
+
+"-"*30
+"type"
+"-"*30
+
+
+type(data)  
+type(df)
+type(df_num)
+
+"-"*30
+"-"*30
+
+"-"*30
+"info"
+"-"*30
+
+
+"data.info()"    
+data.info()   
+# "df.info()")
+# df.info())
+"df_num.info()"
+df_num.info()
+
+"-"*30
+"-"*30
+
+"-"*30
+"head"
+"-"*30
+
+
+"data.head()" 
+data.head()
+# print("df.head()")
+# print(df.head())
+"df_num.head()"
+df_num.head()
+
+
+####################### 3. 탐색적 자료분석 ######################
+step=3
+print(f"{step}")
+# Exploratory Data Analysis
+
+# 입력하세요.
+
+###################### # 4. 변수 선택 및 모델 구축 ######################
+# Feature Engineering & Initial Modeling
+step=4
+print(f"{step}")
+# feature, target 설정
+train_num = df_num.sample(frac=1, random_state=0)
+train_features = train_num.drop(['AMT'], axis=1)
+train_target = np.log1p(train_num['AMT'])
+
+####################### 5. 모델 학습 및 검증 ######################
+# Model Tuning & Evaluation
+step=5
+print(f"{step}")
+# 훈련
+
+model = LGBMRegressor(n_jobs=-1, random_state=0)
+model.fit(train_features, train_target)
+
+# model = build_model()
+
+
+######################## 6. 결과 및 결언 #######################
+step=6
+print(f"{step}")
+# Conclusion & Discussion
+
+################## 7.예측 템플릿 만들기 ##################
+step=7
+print(f"{step}")
+CARD_SIDO_NMs = df_num['CARD_SIDO_NM'].unique()
+STD_CLSS_NMs  = df_num['STD_CLSS_NM'].unique()
+# HOM_SIDO_NMs  = df_num['HOM_SIDO_NM'].unique()
+# AGEs          = df_num['AGE'].unique()
+# SEX_CTGO_CDs  = df_num['SEX_CTGO_CD'].unique()
+# FLCs          = df_num['FLC'].unique()
+years         = [2020]
+months        = [4, 7]
+
+
+
+temp = []
+for CARD_SIDO_NM in CARD_SIDO_NMs:
+    for STD_CLSS_NM in STD_CLSS_NMs:
+        # for HOM_SIDO_NM in HOM_SIDO_NMs:
+        #     for AGE in AGEs:
+        #         for SEX_CTGO_CD in SEX_CTGO_CDs:
+        #             for FLC in FLCs:
+        for year in years:
+            for month in months:
+#                         temp.append([CARD_SIDO_NM, STD_CLSS_NM, HOM_SIDO_NM, AGE, SEX_CTGO_CD, FLC, year, month])
+                temp.append([CARD_SIDO_NM, STD_CLSS_NM, year, month])
+temp = np.array(temp)
+temp = pd.DataFrame(data=temp, columns=['CARD_SIDO_NM', 'STD_CLSS_NM', 'year', 'month'])
+
+# # 예측
+# pred = model.predict(temp)
+# pred = np.expm1(pred)
+# temp['AMT'] = np.round(pred, 0)
+# temp['REG_YYMM'] = temp['year']*100 + temp['month']
+# temp = temp[['REG_YYMM', 'CARD_SIDO_NM', 'STD_CLSS_NM', 'AMT']]
+# temp = temp.groupby(['REG_YYMM', 'CARD_SIDO_NM', 'STD_CLSS_NM']).sum().reset_index(drop=False)
+
+# 디코딩 
+temp['CARD_SIDO_NM'] = encoders['CARD_SIDO_NM'].inverse_transform(temp['CARD_SIDO_NM'])
+temp['STD_CLSS_NM'] = encoders['STD_CLSS_NM'].inverse_transform(temp['STD_CLSS_NM'])
+
+# 제출 파일 만들기
+submission = pd.read_csv('data/dacon/comp3/submission.csv', index_col=0)
+submission = submission.loc[submission['REG_YYMM']==202004]
+submission = submission[['CARD_SIDO_NM', 'STD_CLSS_NM']]
+submission = submission.merge(df, left_on=['CARD_SIDO_NM', 'STD_CLSS_NM'], right_on=['CARD_SIDO_NM', 'STD_CLSS_NM'], how='left')
+submission = submission.fillna(0)
+AMT = list(np.expm1(np.log1p(submission.AMT.values+1)))*2
+
+submission = pd.read_csv('data/dacon/comp3/submission.csv', index_col=0)
+submission['AMT'] = AMT
+
+name=__file__.split("\\")[-1][:-3]
+submission.to_csv(f"./data/dacon/comp3/{name}_{today}.csv", encoding='utf-8-sig')
+submission.head()
+
+# submission.to_csv(f"./data/dacon/comp1/{name}_{size}_{str(mae)[:5]}_{learning_rate}.csv", header = ["hhb", "hbo2", "ca", "na"], index = True, index_label="id" )

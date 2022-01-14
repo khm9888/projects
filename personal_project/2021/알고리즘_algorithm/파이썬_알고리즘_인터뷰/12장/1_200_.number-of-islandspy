@@ -1,0 +1,81 @@
+# # 12-1 섬의 개수
+
+# # 1을 육지로, 0을 물로 가정한 2D 그리드 맵이 주어졌을 때, 섬의 개수를 계산하라.(연결되어 있는 1의 덩어리 개수를 구하라.)
+# # https://leetcode.com/problems/number-of-islands/
+# # 파일 이름 고치기
+
+#1번 리스트로 문제해결하려고 했으나 다른 방법 필요해 보임
+""" 
+from typing import List
+
+class Solution:
+    def numIslands(self, grid: List[List[str]]) -> int:
+        result = 0
+        cnt_rows = len(grid)
+        cnt_cols = len(grid[0])
+        for row in range(cnt_rows) :
+            for col in range(cnt_cols):
+                grid[row][col] = int(grid[row][col])
+                
+        # print(f"cnt_rows:{cnt_rows}")
+        # print(f"cnt_cols:{cnt_cols}")
+        for row in range(cnt_rows) :
+            for col in range(cnt_cols):
+                print(f"row:{row},col:{col}")
+                if grid[row][col]:
+                    if row!=0 and grid[row-1][col]!=0:
+                        continue
+                    elif row!=cnt_rows-1 and grid[row+1][col]!=0:
+                        continue
+                    elif col!=0 and grid[row][col-1]!=0:
+                        continue
+                    elif col!=cnt_cols-1 and grid[row][col+1]!=0:
+                        continue
+                    result+=1
+        return result
+                       
+c= Solution()
+grid = [
+  ["1","1","1","1","0"],
+  ["1","1","0","1","0"],
+  ["1","1","0","0","0"],
+  ["0","0","0","0","0"]
+]
+print(c.numIslands(grid))
+
+ """
+#2번 dfs로 그래프 탐색
+
+from typing import List
+
+class Solution:
+    def numIslands(self, grid: List[List[str]]) -> int:
+        cnt_rows = len(grid)
+        cnt_cols = len(grid[0])
+        def dfs(i,j):
+            #더 이상 땅이 아닌 경우 종료
+            if i<0 or i >= cnt_rows or j<0 or j>=cnt_cols or grid[i][j] != "1":
+                return
+            grid[i][j]=0
+            
+            #동서남북 탐색
+            dfs(i+1,j)
+            dfs(i-1,j)
+            dfs(i,j+1)
+            dfs(i,j-1)
+        count=0
+        for row in range(cnt_rows) :
+            for col in range(cnt_cols):
+                if grid[row][col]=="1":
+                    dfs(row,col)
+                    #a모든 육지 탐색 후 카운트 1 증가
+                    count+=1
+        return count
+c= Solution()
+grid = [
+  ["1","1","1","1","0"],
+  ["1","1","0","1","0"],
+  ["1","1","0","0","0"],
+  ["0","0","0","0","0"]
+]
+print(f"result:{c.numIslands(grid)}")

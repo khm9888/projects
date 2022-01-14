@@ -1,0 +1,1 @@
+python3 -m torch.distributed.launch --nproc_per_node 1 --master_port 12350 main.py --cfg configs/swin_large_patch4_window7_224.yaml --resume pretrained/swin_large_patch4_window7_224_22k.pth --without_head True --data-path /home/ubuntu/Swin-Transformer/data/images/ --output /home/ubuntu/Swin-Transformer/data/result/ --batch-size 30 # 128

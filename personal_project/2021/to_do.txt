@@ -1,0 +1,48 @@
+7/24 - 7월 3주
+
+1. 파이썬 할 수 있는 것들 하기.
+https://tariat.tistory.com/775
+2. 위키독스
+https://wikidocs.net/
+3. 인공지능 개발자모임
+http://aidev.co.kr/index.php?mid=deeplearning&page=2
+
+7월 3주차
+1)웹크롤링
+
+그리고 웹페이지의 형식에 따라,
+1.정적 페이지 크롤링,
+2.동적 페이지 크롤링이 있겠네요.
+
+ - 텍스트(영화_개봉일, 영화 정보 등 / 날씨 / 배당일 /)
+배당일
+1) 선택
+ - selenium
+ - 미국 주식 / 다른 사이트
+
+ -> 조사를 원하는 영업일에 
+ - 시계열
+ - 이미지(오늘의 뉴스 / 최애연예인 / 관심사검색)
+
+2)딥러닝 기본기 - 토치
+3)코딩 도장
+https://dojang.io/mod/page/view.php?id=2151
+
+
+#db 만들어보기
+#ssh 접속환경
+#shell script
+#파이썬게임
+#지연하는 코드
+#conda-가상환경(파이썬)
+#스타크레프트 강화학습
+
+#매크로 - 애니팡 최고점
+https://bre.is/nkPtUcLp
+# 텔레그램이든, 카톡이든 봇 만들기(주식매매 책에서 내용 나왔었음)
+
+#공학자를 위한 파이썬
+https://wikidocs.net/33231
+
+#예제로 배우는 파이썬 프로그래밍
+http://pythonstudy.xyz/python/article/15-%EC%BB%AC%EB%A0%89%EC%85%98--Set

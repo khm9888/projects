@@ -1,0 +1,10 @@
+guitar,conga
+saxophone,banjo
+conga,maracas
+drum set,saxophone
+trumpet,guitar
+bass guitar,trombone
+synthesizer,trumpet
+banjo,drum set
+trombone,bass guitar
+maracas,synthesizer

@@ -1,0 +1,1 @@
+python3 test.py  --classifier_weights /home/ubuntu/Swin-Transformer/data/result/swin_large_patch4_window7_224/default/ckpt_epoch_best.pth --data-path /home/ubuntu/Swin-Transformer/data/images/test/ --classifier_cfg /home/ubuntu/Swin-Transformer/data/result/swin_large_patch4_window7_224/default/config.json
