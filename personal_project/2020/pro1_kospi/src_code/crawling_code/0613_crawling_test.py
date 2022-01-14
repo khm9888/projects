@@ -1,3 +1,9 @@
+
+'''
+2022/01/14
+beautiful soup을 이용하여, data를 긁어오는 예제
+'''
+
 import requests
 from bs4 import BeautifulSoup
 
@@ -22,7 +28,6 @@ print(title.get_text())
 # find_all() : 전체 태그 반환
 
 
-from bs4 import BeautifulSoup
 
 html = """
 <html>
