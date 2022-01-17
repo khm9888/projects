@@ -1,3 +1,5 @@
+
+import seaborn as sns
 import pandas as pd
 import matplotlib.pyplot as plt
 from keras.models import Model
@@ -6,9 +8,12 @@ from sklearn.metrics import r2_score
 import numpy as np
 from sklearn.model_selection import train_test_split as tts
 import seaborn as sns
+# from sklearn.ensemble import GradientBoostingRegressor
+from xgboost import XGBRegressor
 
 
-price_df=pd.read_csv("project\pro1/test.csv",index_col=0,header=0)
+csv_path = "D:\programming/projects/personal_project/2022/pro1_kospi/src_code/crawling_code/total.csv"
+price_df=pd.read_csv(csv_path,index_col=0,header=0)
 
 # print(type(price_df))
 
@@ -31,7 +36,7 @@ def split(datasets,timesteps):
     x_values=list()
     y_values=list()
     for i in range(len(datasets)-timesteps):#10-6
-        x=datasets[i:i+timesteps,2:]#0
+        x=datasets[i:i+timesteps,1:]#0
         y=datasets[i+timesteps,0]
         x_values.append(x)
         y_values.append(y)
@@ -52,7 +57,7 @@ x_pre = x_pre.reshape(-1,x_pre.shape[0]*x_pre.shape[1])
 
 x_train,x_test,y_train,y_test = tts(x,y,train_size=0.7)
 
-from sklearn.preprocessing import MinMaxScaler,RobustScaler
+from sklearn.preprocessing import RobustScaler
 
 scaler = RobustScaler()
 x_train=scaler.fit_transform(x_train)
@@ -63,28 +68,22 @@ x_pre=scaler.transform(x_pre)
 
 #모델
 
-input1=Input(shape=(x.shape[1],))
-dense=Dense(3000,activation="relu")(input1)
-dense=Dense(1,activation="relu")(dense)#회귀
 
-model = Model(inputs=input1,outputs=dense)
+model = XGBRegressor(n_estimators=2000)
 
-model.summary()
 
 #트레이닝
 
-model.compile(loss="mse", optimizer="adam")
-model.fit(x_train,y_train,batch_size=10,epochs=300,validation_split=0.3,verbose=2)
+
+model.fit(x_train,y_train,eval_metric="rmse",eval_set=((x_train,y_train),(x_test,y_test)))
 
 #테스트
-
-loss= model.evaluate(x_test,y_test,batch_size=100)
 
 y_pre=model.predict(x_test)
 y_pre = y_pre.reshape(-1,)
 
 print(__file__)
-print(f"loss:{loss}")
+
 print(f"r2:{r2_score(y_test,y_pre)}")
 # print(f"x_test.shape:{x_test.shape}")
 # print(f"y_pre.shape:{y_pre.shape}")
@@ -114,35 +113,28 @@ y_pre_tomorrow = y_pre_tomorrow.reshape(-1,)
 
 print("tomorrow`s kospi 200 :",y_pre_tomorrow)
 print("tomorrow`s truly kospi 200 :",y_predict)
-'''
-loss:65.35762941120753
-r2:0.8941167093140132
-y_test:[272.37 276.9  263.93 333.62 337.14 296.95 313.82 254.85 316.83 330.68
- 261.57 272.08 271.57 268.27 302.78 295.49 293.64 288.62 324.58 279.4 ]
-y_pre:[277.0359  284.15567 269.65958 329.12198 332.21625 291.3266  310.2673
- 260.02765 304.6729  326.15533 243.99188 269.29858 276.4253  270.37827
- 300.65152 291.69168 293.15652 287.18945 321.83624 287.59952]
-tomorrow`s kospi 200 : [290.0844]
-tomorrow`s truly kospi 200 : 280.46
-'''
-'''
-loss:64.36044299016234
-r2:0.8963805492909578
-y_test:[308.39 278.03 269.93 287.89 270.67 265.99 256.28 261.37 326.6  284.38
- 260.19 335.49 326.12 272.11 278.63 282.59 290.11 314.97 286.38 251.88]
-y_pre:[305.70554 282.95218 267.06866 278.36884 270.94962 271.3525  264.36636
- 270.4281  319.97647 286.45862 264.4598  337.82632 323.73544 272.49686
- 286.42847 275.61917 283.17108 315.3741  296.10767 247.30179]
-tomorrow`s kospi 200 : [290.2241]
-tomorrow`s truly kospi 200 : 280.46
 
-loss:70.08018848023129
-r2:0.8740303635642226
-y_test:[267.75 270.45 274.84 262.47 271.88 300.07 271.35 317.72 254.31 327.61
- 318.01 268.16 267.99 309.71 294.85 298.8  276.44 272.37 272.11 240.65]
-y_pre:[278.14163 272.01648 283.81732 264.78275 270.75787 290.8852  278.48355
- 316.55676 260.18018 334.3228  326.9092  265.35336 261.7739  294.40967
- 286.90692 289.6222  282.54062 280.1979  277.96378 247.53119]
-tomorrow`s kospi 200 : [283.7709]
-tomorrow`s truly kospi 200 : 280.46
-'''
+
+
+
+#2022
+# # xgbregressor
+
+# r2:0.9597776560881905
+# y_test:[396.31 411.5  394.82 414.54 388.47 431.38 387.52 397.68 430.15 391.37
+#  390.39 433.26 434.73 432.63 395.01 417.8  410.38 393.74 428.56 424.74]     
+# y_pre:[395.23767 410.71042 392.70322 416.73672 391.85153 426.7297  389.62115 398.5157  432.12927 397.53192 390.3525  433.09863 435.17896 432.81067      
+#  394.37204 421.3623  409.0211  393.6113  430.54108 430.2827 ]
+
+#2020
+
+# # xgbregressor
+
+# r2:0.941773306488678
+# y_test:[276.64 283.93 275.1  281.28 326.99 247.62 283.7  316.27 288.57 315.37
+#  310.42 276.19 275.57 333.4  300.81 279.43 293.11 279.31 325.79 288.62]
+# y_pre:[292.2866  282.3562  280.73795 283.4182  329.49478 261.39832 296.89334
+#  321.96588 293.97784 319.02112 313.59146 276.7915  286.8655  334.5672
+#  294.1892  279.89813 283.49585 285.53305 324.87302 284.93253]
+# tomorrow`s kospi 200 : [280.02954]
+# tomorrow`s truly kospi 200 : 282.35
