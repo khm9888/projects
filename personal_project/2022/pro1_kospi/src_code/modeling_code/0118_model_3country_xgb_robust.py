@@ -12,8 +12,8 @@ import seaborn as sns
 from xgboost import XGBRegressor
 
 
-
-price_df=pd.read_csv("project\pro1/test.csv",index_col=0,header=0)
+csv_path = "D:\programming/projects/personal_project/2022/pro1_kospi/src_code/crawling_code/total.csv"
+price_df=pd.read_csv(csv_path,index_col=0,header=0)
 
 # print(type(price_df))
 
@@ -116,6 +116,17 @@ print("tomorrow`s truly kospi 200 :",y_predict)
 
 
 
+
+#2022
+# # xgbregressor
+
+# r2:0.9597776560881905
+# y_test:[396.31 411.5  394.82 414.54 388.47 431.38 387.52 397.68 430.15 391.37
+#  390.39 433.26 434.73 432.63 395.01 417.8  410.38 393.74 428.56 424.74]     
+# y_pre:[395.23767 410.71042 392.70322 416.73672 391.85153 426.7297  389.62115 398.5157  432.12927 397.53192 390.3525  433.09863 435.17896 432.81067      
+#  394.37204 421.3623  409.0211  393.6113  430.54108 430.2827 ]
+
+#2020
 
 # # xgbregressor
 

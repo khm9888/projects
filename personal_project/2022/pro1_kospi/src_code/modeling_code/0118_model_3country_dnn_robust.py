@@ -8,7 +8,8 @@ from sklearn.model_selection import train_test_split as tts
 import seaborn as sns
 
 
-price_df=pd.read_csv("project\pro1/test.csv",index_col=0,header=0)
+csv_path = "D:\programming/projects/personal_project/2022/pro1_kospi/src_code/crawling_code/total.csv"
+price_df=pd.read_csv(csv_path,index_col=0,header=0)
 
 # print(type(price_df))
 
@@ -31,7 +32,7 @@ def split(datasets,timesteps):
     x_values=list()
     y_values=list()
     for i in range(len(datasets)-timesteps):#10-6
-        x=datasets[i:i+timesteps,2:]#0
+        x=datasets[i:i+timesteps,1:]#0
         y=datasets[i+timesteps,0]
         x_values.append(x)
         y_values.append(y)
@@ -52,7 +53,7 @@ x_pre = x_pre.reshape(-1,x_pre.shape[0]*x_pre.shape[1])
 
 x_train,x_test,y_train,y_test = tts(x,y,train_size=0.7)
 
-from sklearn.preprocessing import MinMaxScaler,RobustScaler
+from sklearn.preprocessing import RobustScaler
 
 scaler = RobustScaler()
 x_train=scaler.fit_transform(x_train)
@@ -65,6 +66,8 @@ x_pre=scaler.transform(x_pre)
 
 input1=Input(shape=(x.shape[1],))
 dense=Dense(3000,activation="relu")(input1)
+dense=Dense(200,activation="relu")(dense)#회귀
+dense=Dense(10,activation="relu")(dense)#회귀
 dense=Dense(1,activation="relu")(dense)#회귀
 
 model = Model(inputs=input1,outputs=dense)
@@ -92,7 +95,7 @@ print(f"r2:{r2_score(y_test,y_pre)}")
 print(f"y_test:{y_test[0:20]}")
 print(f"y_pre:{y_pre[0:20]}")
 
-y_values = pd.DataFrame(dict(y_test=y_test[0:20],y_pre=y_pre[0:20]),index=range(1,21))
+y_values = pd.DataFrame(dict(y_test=y_test,y_pre=y_pre))
 
 # print(y_values)
 
@@ -115,34 +118,33 @@ y_pre_tomorrow = y_pre_tomorrow.reshape(-1,)
 print("tomorrow`s kospi 200 :",y_pre_tomorrow)
 print("tomorrow`s truly kospi 200 :",y_predict)
 '''
-loss:65.35762941120753
-r2:0.8941167093140132
-y_test:[272.37 276.9  263.93 333.62 337.14 296.95 313.82 254.85 316.83 330.68
- 261.57 272.08 271.57 268.27 302.78 295.49 293.64 288.62 324.58 279.4 ]
-y_pre:[277.0359  284.15567 269.65958 329.12198 332.21625 291.3266  310.2673
- 260.02765 304.6729  326.15533 243.99188 269.29858 276.4253  270.37827
- 300.65152 291.69168 293.15652 287.18945 321.83624 287.59952]
-tomorrow`s kospi 200 : [290.0844]
+loss:27.008601412747076
+r2:0.9588118067808987
+y_test:[232.45 273.88 269.79 300.07 335.49 318.51 253.37 276.61 279.87 265.35
+ 325.79 301.53 297.19 256.28 293.77 309.53 291.63 280.32 295.9  292.9 ]
+y_pre:[224.97675 275.378   268.9614  296.59912 331.90863 317.7645  263.43417
+ 275.82385 278.84818 262.67288 322.40494 296.18347 297.0006  257.81317
+ 297.57944 304.67685 293.4476  274.75726 298.72748 297.3773 ]
+tomorrow`s kospi 200 : [286.17407]
 tomorrow`s truly kospi 200 : 280.46
 '''
-'''
-loss:64.36044299016234
-r2:0.8963805492909578
-y_test:[308.39 278.03 269.93 287.89 270.67 265.99 256.28 261.37 326.6  284.38
- 260.19 335.49 326.12 272.11 278.63 282.59 290.11 314.97 286.38 251.88]
-y_pre:[305.70554 282.95218 267.06866 278.36884 270.94962 271.3525  264.36636
- 270.4281  319.97647 286.45862 264.4598  337.82632 323.73544 272.49686
- 286.42847 275.61917 283.17108 315.3741  296.10767 247.30179]
-tomorrow`s kospi 200 : [290.2241]
-tomorrow`s truly kospi 200 : 280.46
+'''loss:22.820804491720565
+r2:0.9627051191779331
+y_test:[325.67 292.86 268.75 335.44 327.35 327.01 255.02 289.   293.7  266.65
+ 316.71 265.55 255.85 276.56 320.12 269.93 263.74 312.86 267.4  298.8 ]
+y_pre:[330.2439  290.99133 271.85178 334.41452 328.15048 333.49796 248.9524
+ 286.93222 290.191   269.79324 320.0214  266.75583 259.2432  280.54288
+ 319.39877 271.031   264.7982  318.62424 272.56058 295.34888]
+tomorrow`s kospi 200 : [285.29263]
+tomorrow`s truly kospi 200 : 280.46'''
+'''loss:20.023361914796254
+r2:0.9676992168119598
+y_test:[274.34 326.6  294.4  249.4  262.95 337.8  338.05 279.94 268.32 295.24
+ 288.43 264.44 289.85 296.95 268.16 296.19 327.61 324.52 313.94 259.62]
+y_pre:[274.85233 322.46036 291.3811  255.69598 271.44635 335.14426 336.6804
+ 281.965   270.15814 299.25055 292.1756  262.83014 292.93848 300.19287
+ 265.04956 294.17758 331.9265  324.69424 308.64795 259.1942 ]
+tomorrow`s kospi 200 : [285.58734]
+tomorrow`s truly kospi 200 : 280.46'''
 
-loss:70.08018848023129
-r2:0.8740303635642226
-y_test:[267.75 270.45 274.84 262.47 271.88 300.07 271.35 317.72 254.31 327.61
- 318.01 268.16 267.99 309.71 294.85 298.8  276.44 272.37 272.11 240.65]
-y_pre:[278.14163 272.01648 283.81732 264.78275 270.75787 290.8852  278.48355
- 316.55676 260.18018 334.3228  326.9092  265.35336 261.7739  294.40967
- 286.90692 289.6222  282.54062 280.1979  277.96378 247.53119]
-tomorrow`s kospi 200 : [283.7709]
-tomorrow`s truly kospi 200 : 280.46
-'''
+
