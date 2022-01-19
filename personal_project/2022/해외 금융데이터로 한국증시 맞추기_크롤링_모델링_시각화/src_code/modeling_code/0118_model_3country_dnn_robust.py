@@ -1,11 +1,12 @@
 import pandas as pd
 import matplotlib.pyplot as plt
-from keras.models import Model
-from keras.layers import Dense,Input
-from sklearn.metrics import r2_score
 import numpy as np
-from sklearn.model_selection import train_test_split as tts
+import torch
+import torch.nn as nn
 import seaborn as sns
+from sklearn.metrics import r2_score
+from sklearn.model_selection import train_test_split as tts
+from sklearn.preprocessing import RobustScaler
 
 
 csv_path = "D:\programming/projects/personal_project/2022/pro1_kospi/src_code/crawling_code/total.csv"
@@ -53,7 +54,6 @@ x_pre = x_pre.reshape(-1,x_pre.shape[0]*x_pre.shape[1])
 
 x_train,x_test,y_train,y_test = tts(x,y,train_size=0.7)
 
-from sklearn.preprocessing import RobustScaler
 
 scaler = RobustScaler()
 x_train=scaler.fit_transform(x_train)
@@ -63,6 +63,13 @@ x_pre=scaler.transform(x_pre)
 # print(x_pre)
 
 #모델
+
+print()
+
+net = nn.Sequential(
+    nn.Linear(x.shape[1],64)
+    nn.
+)
 
 input1=Input(shape=(x.shape[1],))
 dense=Dense(3000,activation="relu")(input1)
