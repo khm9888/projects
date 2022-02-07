@@ -21,3 +21,12 @@ N은 1,000,000보다 작거나 같은 자연수이다.
 첫째 줄에 필요한 세트의 개수를 출력한다.
 
 '''
+from collections import Counter
+
+numbers_list = list(map(int,input()))
+
+c_nums = Counter(numbers_list)
+six_nines = c_nums[6]+c_nums[9]
+c_nums[6],c_nums[9]=(six_nines//2 if six_nines%2==0 else six_nines//2+1),0
+# print(c_nums)
+print(max(c_nums.values()))
