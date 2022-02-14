@@ -17,8 +17,8 @@ q_name=title.split(":")[-1].lstrip()
 name=__file__.split("\\")[-1]
 # folder=__file__[:-len(name)-1].split("\\")[-1]
 
-# path=__file__[:-len(name)]+f"beakjoon_{q_name}_{q_num}_tier.py"
-path=__file__[:-len(name)]+f"beakjoon__{q_num}_tier.py"
+path=__file__[:-len(name)]+f"beakjoon_{q_name}_{q_num}_tier.py"
+# path=__file__[:-len(name)]+f"beakjoon__{q_num}_tier.py"
 # print(path)
 
 with open(path,"w",encoding="utf-8") as file:
