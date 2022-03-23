@@ -19,36 +19,21 @@ M이상 N이하의 자연수 중 완전제곱수인 것을 모두 찾아 첫째 
 
 '''
 
-n = int(input())
 m = int(input())
+n = int(input())
 
 # min_num = float("inf")
 result_list = list()
 i = 1
 while i**2 <= n:
-    print(n, m)
-    if n <= i**2 and i**2 <= m:
-        print(True)
+    # print(n, m)
+    if m <= i**2 and i**2 <= n:
+        # print(True)
         result_list.append(i**2)
     i += 1
-    print(result_list)
+    # print(result_list)
 if result_list:
     print(sum(result_list))
     print(result_list[0])
 else:
     print(-1)
-
-#########################
-m = int(input())
-n = int(input())
-num = []
-i = 1
-while i**2 <= n:
-    if m <= i**2 <= n:
-        num.append(i**2)
-    i += 1
-if num == []:
-    print(-1)
-else:
-    print(sum(num))
-    print(num[0])
