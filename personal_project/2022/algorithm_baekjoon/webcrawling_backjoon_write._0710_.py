@@ -1,4 +1,4 @@
-#백준 문제 긁어오기
+# 백준 문제 긁어오기
 
 from urllib.request import Request, urlopen
 import bs4
